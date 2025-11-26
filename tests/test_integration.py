@@ -1,5 +1,6 @@
 import pytest
 from dotenv import load_dotenv
+from tests.conftest import skip_if_no_real_token
 
 from bgg_extractor.client import BGGClient
 from bgg_extractor.schemas import SearchSchema, ThingSchema, UserSchema
@@ -7,6 +8,7 @@ from bgg_extractor.schemas import SearchSchema, ThingSchema, UserSchema
 load_dotenv()
 
 
+@skip_if_no_real_token
 @pytest.mark.asyncio
 async def test_integration_get_thing():
     """Integration test for get_thing against real API."""
@@ -21,6 +23,7 @@ async def test_integration_get_thing():
         assert item.type == "boardgame"
 
 
+@skip_if_no_real_token
 @pytest.mark.asyncio
 async def test_integration_get_user():
     """Integration test for get_user against real API."""
@@ -34,6 +37,7 @@ async def test_integration_get_user():
         assert user.id is not None
 
 
+@skip_if_no_real_token
 @pytest.mark.asyncio
 async def test_integration_search():
     """Integration test for search against real API."""

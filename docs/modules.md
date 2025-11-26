@@ -1,3 +1,5 @@
+# Modules
+
 ::: bgg_extractor.client
 ::: bgg_extractor.schemas
 ::: bgg_extractor.persistence

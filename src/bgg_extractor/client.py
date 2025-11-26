@@ -158,7 +158,7 @@ class BGGClient:
         top: bool = False,
         domain: str = "boardgame",
         page: int = 1,
-        **kwargs,
+        **kwargs: Any,
     ) -> UserSchema:
         """Fetch user details.
 
@@ -209,7 +209,7 @@ class BGGClient:
         maxplays: int | None = None,
         collectionid: int | None = None,
         modifiedsince: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> CollectionSchema:
         """Fetch a user's collection.
 
@@ -280,7 +280,7 @@ class BGGClient:
         ratingcomments: bool = False,
         page: int = 1,
         pagesize: int = 100,
-        **kwargs,
+        **kwargs: Any,
     ) -> ThingSchema:
         """Fetch details for specific things (games).
 
@@ -333,7 +333,7 @@ class BGGClient:
         query: str,
         thing_type: str | None = None,
         exact: bool = False,
-        **kwargs,
+        **kwargs: Any,
     ) -> SearchSchema:
         """Search for items.
 
@@ -364,7 +364,7 @@ class BGGClient:
         maxdate: str | None = None,
         subtype: str = "boardgame",
         page: int = 1,
-        **kwargs,
+        **kwargs: Any,
     ) -> PlaysSchema:
         """Fetch plays data.
 
@@ -408,7 +408,7 @@ class BGGClient:
         self,
         ids: list[int],
         family_type: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> FamilySchema:
         """Fetch details for specific families.
 
@@ -440,7 +440,7 @@ def run_sync(coro):
     return loop.run_until_complete(coro)
 
 
-def search(query: str, **kwargs) -> SearchSchema:
+def search(query: str, **kwargs: Any) -> SearchSchema:
     """Synchronous wrapper for search."""
 
     async def _run():
@@ -450,7 +450,7 @@ def search(query: str, **kwargs) -> SearchSchema:
     return run_sync(_run())
 
 
-def get_things(ids: list[int], **kwargs) -> ThingSchema:
+def get_things(ids: list[int], **kwargs: Any) -> ThingSchema:
     """Synchronous wrapper for get_thing."""
 
     async def _run():
@@ -460,7 +460,7 @@ def get_things(ids: list[int], **kwargs) -> ThingSchema:
     return run_sync(_run())
 
 
-def get_collection(username: str, **kwargs) -> CollectionSchema:
+def get_collection(username: str, **kwargs: Any) -> CollectionSchema:
     """Synchronous wrapper for get_collection."""
 
     async def _run():
@@ -470,7 +470,7 @@ def get_collection(username: str, **kwargs) -> CollectionSchema:
     return run_sync(_run())
 
 
-def get_plays(username: str | None = None, thing_id: int | None = None, **kwargs) -> PlaysSchema:
+def get_plays(username: str | None = None, thing_id: int | None = None, **kwargs: Any) -> PlaysSchema:
     """Synchronous wrapper for get_plays."""
 
     async def _run():
@@ -480,7 +480,7 @@ def get_plays(username: str | None = None, thing_id: int | None = None, **kwargs
     return run_sync(_run())
 
 
-def get_family(ids: list[int], **kwargs) -> FamilySchema:
+def get_family(ids: list[int], **kwargs: Any) -> FamilySchema:
     """Synchronous wrapper for get_family."""
 
     async def _run():
@@ -490,7 +490,7 @@ def get_family(ids: list[int], **kwargs) -> FamilySchema:
     return run_sync(_run())
 
 
-def get_user(name: str, **kwargs) -> UserSchema:
+def get_user(name: str, **kwargs: Any) -> UserSchema:
     """Synchronous wrapper for get_user."""
 
     async def _run():

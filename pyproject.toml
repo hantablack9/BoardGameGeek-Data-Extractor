@@ -1,0 +1,183 @@
+[project]
+name = "BGG-Extractor"
+version = "0.1.0"
+description = """A Python Library using BoardGameGeek's BGG XML API2 for running extract, store and transform jobs with configurablue storage options (on-device/cloud) and schemas. Full documentation is provided on BGG's official [website](https://boardgamegeek.com/wiki/page/BGG_XML_API2#toc17). Initially built based on the BGG API XML 2 User Guide and Terms of Use as on 23-Nov-2025.
+
+Extract data from BoardGameGeek XMLAPI2 with pluggable storage backends (local, S3) and output formats (parquet/csv/json)."""
+authors = [{ name = "Hanish Paturi", email = "hanishpaturi1320@gmail.com" }]
+readme = "README.md"
+license = { text = "Apache-2.0" }
+keywords = [
+    "python",
+    "boardgamegeek",
+    "bgg",
+    "xmlapi",
+    "etl",
+    "parquet",
+    "csv",
+    "s3",
+]
+requires-python = ">=3.11,<4.0"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "apache-airflow>=3.1.3",
+    "boto3>=1.41.2",
+    "httpx>=0.28.1",
+    "opentelemetry-api>=1.38.0",
+    "opentelemetry-sdk>=1.38.0",
+    "pandas>=2.3.3",
+    "pyarrow>=21.0.0",
+    "pydantic>=2.12.4",
+    "pytest>=9.0.1",
+    "python-dotenv>=1.2.1",
+    "pyyaml>=6.0.3",
+    "respx>=0.22.0",
+    "snowflake-sqlalchemy>=1.7.3",
+    "snowflake-connector-python>=3.13.0",
+    "sqlalchemy>=2.0.44",
+    "ipykernel>=7.1.0",
+]
+
+[project.urls]
+Homepage = "https://hantablack9.github.io/BGG-Extractor/"
+Repository = "https://github.com/hantablack9/BGG-Extractor"
+Documentation = "https://hantablack9.github.io/BGG-Extractor/"
+
+[dependency-groups]
+dev = [
+    "pytest>=7.2.0",
+    "pre-commit>=2.20.0",
+    "tox-uv>=1.11.3",
+    "deptry>=0.23.0",
+    "ty>=0.0.1a16",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.11.5",
+    "mkdocs>=1.4.2",
+    "mkdocs-material>=8.5.10",
+    "mkdocstrings[python]>=0.26.1",
+    "build>=1.3.0",
+    "twine>=6.2.0",
+    "mypy>=1.18.2",
+    "pytest-mock>=3.15.1",
+    "respx>=0.22.0",
+    "pytest-asyncio>=1.3.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bgg_extractor"]
+
+[tool.mypy]
+files = ["src"]
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+show_error_codes = true
+
+[tool.ty.environment]
+python = "./.venv"
+python-version = "3.12"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+fix = true
+src = ["src"]
+
+[tool.ruff.lint]
+select = [
+    # flake8-2020
+    "YTT",
+    # flake8-bandit
+    "S",
+    # flake8-bugbear
+    "B",
+    # flake8-builtins
+    "A",
+    # flake8-comprehensions
+    "C4",
+    # flake8-debugger
+    "T10",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # mccabe
+    "C90",
+    # pycodestyle
+    "E",
+    "W",
+    # pyflakes
+    "F",
+    # pygrep-hooks
+    "PGH",
+    # pyupgrade
+    "UP",
+    # ruff
+    "RUF",
+    # tryceratops
+    "TRY",
+]
+ignore = [
+    # LineTooLong
+    "E501",
+    # DoNotAssignLambda
+    "E731",
+    # XML parsing is safe for BGG API responses
+    "S314",
+    # Long error messages - acceptable for user-facing errors
+    "TRY003",
+    # Complex functions - legacy code, can refactor later
+    "C901",
+    # Style preferences
+    "SIM108",
+    "B023",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+"notebooks/*" = ["F821", "E402"]
+"debug/*" = ["S310", "T201", "F401"]
+
+[tool.ruff.format]
+preview = true
+
+[tool.coverage.report]
+skip_empty = true
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+ignore = [
+    # LineTooLong
+    "E501",
+    # DoNotAssignLambda
+    "E731",
+    "TRY003",
+    "TRY300",
+]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
+[project.scripts]
+bgg-extractor = "bgg_extractor.cli:main"

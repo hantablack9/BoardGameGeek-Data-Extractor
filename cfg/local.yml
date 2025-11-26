@@ -1,0 +1,4 @@
+BASE = "https://boardgamegeek.com/xmlapi2"
+DEFAULT_WAIT_SECONDS = 5.0
+DEFAULT_TIMEOUT = 30.0
+MAX_POLL_ATTEMPTS = 12  # 12 * 5s = ~60s max wait for 202 -> 200

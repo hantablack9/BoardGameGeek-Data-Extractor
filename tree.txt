@@ -1,0 +1,22 @@
+.
+|-- CONTRIBUTING.md
+|-- Dockerfile
+|-- LICENSE
+|-- Makefile
+|-- README.md
+|-- codecov.yaml
+|-- docs
+|   |-- index.md
+|   `-- modules.md
+|-- mkdocs.yml
+|-- pyproject.toml
+|-- src
+|   `-- boardgamegeek_data_extractor
+|       |-- __init__.py
+|       `-- foo.py
+|-- tests
+|   `-- test_foo.py
+|-- tox.ini
+`-- tree.txt
+
+4 directories, 15 files

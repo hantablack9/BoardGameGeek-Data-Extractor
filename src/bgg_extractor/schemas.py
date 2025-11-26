@@ -5,9 +5,10 @@ and provides XML parsing logic to convert raw API responses into typed Pydantic 
 """
 
 import xml.etree.ElementTree as ET
+from collections.abc import Callable
 from typing import Any, Literal, cast
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 ThingType = Literal[
     "boardgame",
@@ -32,7 +33,7 @@ class ThingItem(BaseModel):
     """
 
     id: int | None = None
-    type: ThingType | None = None
+    type: str | None = None
     name: str | None = None
     description: str | None = None
     yearpublished: int | None = None
@@ -48,6 +49,13 @@ class ThingItem(BaseModel):
     designers: list[str] = []
     artists: list[str] = []
     publishers: list[str] = []
+
+    @field_validator("type")
+    def validate_type(cls, v: str | None) -> str | None:
+        allowed = {"boardgame", "boardgameexpansion", "boardgameaccessory", "videogame", "rpgitem", "rpgissue"}
+        if v is not None and v not in allowed:
+            raise ValueError(f"Invalid type: {v}")
+        return v
 
 
 class ThingSchema(BaseModel):
@@ -75,7 +83,7 @@ class ThingSchema(BaseModel):
             item_id = item.attrib.get("id")
 
             # Helper to get value from simple tag
-            def get_val(tag: str, convert=str) -> Any | None:
+            def get_val(tag: str, convert: Callable[[str], Any] = str) -> Any | None:
                 node = item.find(tag)
                 if node is not None:
                     val = node.attrib.get("value")
@@ -186,9 +194,16 @@ class UserSchema(BaseModel):
         if usr is None:
             return cls()
 
-        def get_val(tag_name: str) -> str | None:
-            tag = usr.find(tag_name)
-            return tag.attrib.get("value") if tag is not None else None
+        def get_val(tag: str, convert: Callable[[str], Any] = str) -> Any | None:
+            node = usr.find(tag)
+            if node is not None:
+                val = node.attrib.get("value")
+                if val:
+                    try:
+                        return convert(val)
+                    except (ValueError, TypeError):
+                        return None
+            return None
 
         def get_list(tag_name: str) -> list[dict[str, Any]]:
             node = usr.find(tag_name)

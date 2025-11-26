@@ -6,6 +6,7 @@ BGG XMLAPI2 client implementation using httpx for async requests.
 import asyncio
 import os
 import time
+from collections.abc import Sequence
 from typing import Any
 
 import httpx
@@ -269,7 +270,7 @@ class BGGClient:
 
     async def get_thing(
         self,
-        ids: list[int],
+        ids: Sequence[int | None | Any],
         thing_type: str | None = None,
         versions: bool = False,
         videos: bool = False,
@@ -285,7 +286,7 @@ class BGGClient:
         """Fetch details for specific things (games).
 
         Args:
-            ids: List of BGG thing IDs.
+            ids: List of BGG thing IDs. ``None`` values are ignored.
             thing_type: Filter by item type.
             versions: Include version info.
             videos: Include videos.
@@ -302,8 +303,9 @@ class BGGClient:
             A ThingSchema object.
         """
         if not ids:
-            raise ValueError("ids list must not be empty")
+            raise ValueError("ids list must not be empty.")
         params = {"id": ",".join(str(i) for i in ids)}
+
         if thing_type:
             params["type"] = thing_type
         if versions:

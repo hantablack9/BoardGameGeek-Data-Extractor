@@ -9,7 +9,13 @@ copyright: Maintained by <a href="https://hantablack9.com">hantablack9</a>.
 
 nav:
   - Home: index.md
+  - User Guide: user_guide.md
+  - Examples: examples.md
+  - API Reference: api_reference.md
   - Modules: modules.md
+  - Internal:
+      - Future Scope: internal/future_scope.md
+      - Project Walkthrough: internal/project_walkthrough.md
 plugins:
   - search
   - mkdocstrings:

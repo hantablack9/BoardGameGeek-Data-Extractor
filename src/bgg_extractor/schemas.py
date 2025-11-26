@@ -196,8 +196,9 @@ class UserSchema(BaseModel):
                 return [item.attrib for item in node.findall("item") or node.findall("buddy") or node.findall("guild")]
             return []
 
+        user_id = usr.attrib.get("id")
         return cls(
-            id=int(usr.attrib.get("id")) if usr.attrib.get("id") else None,
+            id=int(user_id) if user_id else None,
             name=usr.attrib.get("name"),
             firstname=get_val("firstname"),
             lastname=get_val("lastname"),
@@ -266,13 +267,19 @@ class CollectionSchema(BaseModel):
                     val = rating_node.attrib.get("value")
                     if val and val != "N/A":
                         rating = val
+                elif stats.attrib.get("rating"):
+                    rating = stats.attrib.get("rating")
 
+            objectid_val = item.attrib.get("objectid")
+            collid_val = item.attrib.get("collid")
             items.append(
                 CollectionItem(
-                    objectid=int(item.attrib.get("objectid")) if item.attrib.get("objectid") else None,
+                    objectid=int(objectid_val) if objectid_val else None,
                     subtype=item.attrib.get("subtype"),
-                    collid=int(item.attrib.get("collid")) if item.attrib.get("collid") else None,
-                    name=name_node.text if name_node is not None else None,
+                    collid=int(collid_val) if collid_val else None,
+                    name=name_node.text
+                    if name_node is not None and name_node.text
+                    else (name_node.attrib.get("value") if name_node is not None else None),
                     rating=float(rating) if rating else None,
                     status=status_node.attrib if status_node is not None else {},
                     comment=comment_node.text if comment_node is not None else None,
@@ -334,12 +341,15 @@ class PlaysSchema(BaseModel):
 
             comments_elem = p.find("comments")
             item_elem = p.find("item")
+            play_id = p.attrib.get("id")
+            quantity = p.attrib.get("quantity")
+            length = p.attrib.get("length")
             plays.append(
                 PlayItem(
-                    id=int(p.attrib.get("id")) if p.attrib.get("id") else None,
+                    id=int(play_id) if play_id else None,
                     date=p.attrib.get("date"),
-                    quantity=int(p.attrib.get("quantity")) if p.attrib.get("quantity") else None,
-                    length=int(p.attrib.get("length")) if p.attrib.get("length") else None,
+                    quantity=int(quantity) if quantity else None,
+                    length=int(length) if length else None,
                     location=p.attrib.get("location"),
                     comment=comments_elem.text if comments_elem is not None else None,
                     item=item_elem.attrib if item_elem is not None else None,

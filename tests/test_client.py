@@ -30,7 +30,7 @@ async def test_get_user_success():
     </user>
     """
     async with respx.mock:
-        respx.get(url__startswith="https://boardgamegeek.com/xmlapi2/user").mock(
+        respx.get(url__startswith="https://api.geekdo.com/xmlapi2/user").mock(
             return_value=Response(200, text=xml_response)
         )
 
@@ -54,7 +54,7 @@ async def test_get_thing_success():
     </items>
     """
     async with respx.mock:
-        respx.get(url__startswith="https://boardgamegeek.com/xmlapi2/thing").mock(
+        respx.get(url__startswith="https://api.geekdo.com/xmlapi2/thing").mock(
             return_value=Response(200, text=xml_response)
         )
 
@@ -72,7 +72,7 @@ async def test_retry_on_202():
     xml_response = """<items><item id="1"><name value="Game"/></item></items>"""
 
     async with respx.mock:
-        route = respx.get(url__startswith="https://boardgamegeek.com/xmlapi2/thing")
+        route = respx.get(url__startswith="https://api.geekdo.com/xmlapi2/thing")
         route.side_effect = [
             Response(202, text="Queued"),
             Response(202, text="Queued"),
@@ -90,7 +90,7 @@ async def test_retry_on_202():
 async def test_max_retries_exceeded():
     """Test that RuntimeError is raised when max poll attempts are exceeded."""
     async with respx.mock:
-        respx.get(url__startswith="https://boardgamegeek.com/xmlapi2/thing").mock(
+        respx.get(url__startswith="https://api.geekdo.com/xmlapi2/thing").mock(
             return_value=Response(202, text="Queued")
         )
 

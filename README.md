@@ -22,7 +22,9 @@ A production-grade Python library for extracting, transforming, and persisting d
 ## Documentation
 
 📚 **[User Guide](docs/user_guide.md)** - Installation, configuration, and usage
+
 📖 **[API Reference](docs/api_reference.md)** - Complete API documentation
+
 💡 **[Examples](docs/examples.md)** - Real-world usage examples
 
 ## Quick Start
@@ -82,4 +84,4 @@ save_json(games.items, "catan_games.json")
 
 ## Contributing
 
-See CONTRIBUTING.md
+See [CONTRIBUTING.md](CONTRIBUTING.md)

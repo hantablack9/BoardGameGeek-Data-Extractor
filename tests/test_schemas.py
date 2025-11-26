@@ -77,4 +77,5 @@ def test_parse_plays_xml():
     assert play.date == "2023-01-01"
     assert play.quantity == 1
     assert play.length == 60
+    assert play.item is not None  # Type narrowing for type checker
     assert play.item["name"] == "Die Macher"

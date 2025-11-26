@@ -91,6 +91,7 @@ def run_extraction(args: argparse.Namespace, cfg: dict[str, Any]) -> None:
             if not things:
                 print("Error: --things (or config 'things') required for extractor=things", file=sys.stderr)
                 sys.exit(1)
+            assert things is not None  # noqa: S101 - Type narrowing for type checker
             print(f"Extracting things: {things}")
             schema = get_things(
                 things, stats=True, versions=True, videos=True, marketplace=True, comments=True, ratingcomments=True
@@ -101,6 +102,7 @@ def run_extraction(args: argparse.Namespace, cfg: dict[str, Any]) -> None:
             if not families:
                 print("Error: --families (or config 'families') required for extractor=family", file=sys.stderr)
                 sys.exit(1)
+            assert families is not None  # noqa: S101 - Type narrowing for type checker
             print(f"Extracting families: {families}")
             schema = get_family(families)
             data = schema.items
@@ -109,6 +111,7 @@ def run_extraction(args: argparse.Namespace, cfg: dict[str, Any]) -> None:
             if not query:
                 print("Error: --query (or config 'query') required for extractor=search", file=sys.stderr)
                 sys.exit(1)
+            assert query is not None  # noqa: S101 - Type narrowing for type checker
             print(f"Searching for: {query}")
             schema = search(query)
             data = schema.items
@@ -117,6 +120,7 @@ def run_extraction(args: argparse.Namespace, cfg: dict[str, Any]) -> None:
             if not username:
                 print("Error: --user (or config 'user') required for extractor=collection", file=sys.stderr)
                 sys.exit(1)
+            assert username is not None  # noqa: S101 - Type narrowing for type checker
             print(f"Extracting collection for user: {username}")
             schema = get_collection(username, version=True, stats=True, showprivate=True)
             data = schema.items
@@ -125,6 +129,7 @@ def run_extraction(args: argparse.Namespace, cfg: dict[str, Any]) -> None:
             if not username:
                 print("Error: --user (or config 'user') required for extractor=user", file=sys.stderr)
                 sys.exit(1)
+            assert username is not None  # noqa: S101 - Type narrowing for type checker
             print(f"Extracting user profile: {username}")
             schema = get_user(username, buddies=True, guilds=True, hot=True, top=True)
             data = schema

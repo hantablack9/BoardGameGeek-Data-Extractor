@@ -5,7 +5,7 @@ and provides XML parsing logic to convert raw API responses into typed Pydantic 
 """
 
 import xml.etree.ElementTree as ET
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 from pydantic import BaseModel
 
@@ -94,7 +94,9 @@ class ThingSchema(BaseModel):
             # Helper to get list of values from links
             def get_links(link_type: str) -> list[str]:
                 return [
-                    link.attrib.get("value") for link in item.findall("link") if link.attrib.get("type") == link_type
+                    val
+                    for link in item.findall("link")
+                    if link.attrib.get("type") == link_type and (val := link.attrib.get("value")) is not None
                 ]
 
             usersrated = None
@@ -118,7 +120,10 @@ class ThingSchema(BaseModel):
             items.append(
                 ThingItem(
                     id=int(item_id) if item_id else None,
-                    type=item.attrib.get("type"),
+                    type=cast(ThingType, item.attrib.get("type"))
+                    if item.attrib.get("type")
+                    in ["boardgame", "boardgameexpansion", "boardgameaccessory", "videogame", "rpgitem", "rpgissue"]
+                    else None,
                     name=get_val("name"),  # Primary name usually has type="primary" but value attribute is standard
                     description=get_text("description"),
                     yearpublished=get_val("yearpublished", int),
@@ -327,6 +332,8 @@ class PlaysSchema(BaseModel):
             if players_node is not None:
                 players = [pl.attrib for pl in players_node.findall("player")]
 
+            comments_elem = p.find("comments")
+            item_elem = p.find("item")
             plays.append(
                 PlayItem(
                     id=int(p.attrib.get("id")) if p.attrib.get("id") else None,
@@ -334,8 +341,8 @@ class PlaysSchema(BaseModel):
                     quantity=int(p.attrib.get("quantity")) if p.attrib.get("quantity") else None,
                     length=int(p.attrib.get("length")) if p.attrib.get("length") else None,
                     location=p.attrib.get("location"),
-                    comment=p.find("comments").text if p.find("comments") is not None else None,
-                    item=p.find("item").attrib if p.find("item") is not None else None,
+                    comment=comments_elem.text if comments_elem is not None else None,
+                    item=item_elem.attrib if item_elem is not None else None,
                     players=players,
                 )
             )
@@ -426,7 +433,10 @@ class SearchSchema(BaseModel):
             items.append(
                 ThingItem(
                     id=int(item_id) if item_id else None,
-                    type=item.attrib.get("type"),
+                    type=cast(ThingType, item.attrib.get("type"))
+                    if item.attrib.get("type")
+                    in ["boardgame", "boardgameexpansion", "boardgameaccessory", "videogame", "rpgitem", "rpgissue"]
+                    else None,
                     name=name.attrib.get("value") if name is not None else None,
                     yearpublished=int(year.attrib.get("value"))
                     if year is not None and year.attrib.get("value")

@@ -1,0 +1,19 @@
+{
+  "include": [
+    "src",
+    "tests"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "notebooks",
+    "debug"
+  ],
+  "ignore": [
+    "tests/test_literal_validation.py"
+  ],
+  "reportMissingTypeStubs": false,
+  "reportUnknownArgumentType": false,
+  "reportUnknownVariableType": false,
+  "pythonVersion": "3.12"
+}

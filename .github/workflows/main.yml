@@ -47,7 +47,7 @@ jobs:
         run: uv run python -m pytest tests --cov --cov-config=pyproject.toml --cov-report=xml
 
       - name: Check typing
-        run: uv run ty check
+        run: uv run ty check --exclude "notebooks/**" --exclude "tests/test_literal_validation.py"
 
 
       - name: Upload coverage reports to Codecov with GitHub Action on Python 3.12

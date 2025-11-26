@@ -50,12 +50,12 @@ class BGGClient:
             to_sleep = self.min_delay - elapsed
             time.sleep(to_sleep)
 
-    def _request_xml(self, path: str, params: dict[str, Any]) -> str | None:
+    def _request_xml(self, path: str, params: dict[str, Any]) -> str:
         """
         GET request that:
         - respects throttle (min_delay)
         - polls on 202 responses until 200 or until attempts exhausted
-        Returns XML text on success (200), or None on unrecoverable error.
+        Returns XML text on success (200), raises RuntimeError on failure.
         """
         url = f"{self.base_url}/{path.lstrip('/')}"
         attempts = 0
@@ -268,10 +268,11 @@ class BGGClient:
         root = ET.fromstring(xml_text)
         items = []
         for item in root.findall("item"):
+            name_elem = item.find("name")
             items.append({
                 "id": item.attrib.get("id"),
                 "type": item.attrib.get("type"),
-                "name": item.find("name").attrib.get("value") if item.find("name") is not None else None,
+                "name": name_elem.attrib.get("value") if name_elem is not None else None,
             })
         return {"items": items}
 

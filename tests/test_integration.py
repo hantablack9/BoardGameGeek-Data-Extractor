@@ -29,6 +29,7 @@ async def test_integration_get_user():
         # Fetch a known user, e.g., "BoardGameGeek" (admin) or a stable user
         user = await client.get_user("BoardGameGeek")
         assert isinstance(user, UserSchema)
+        assert user.name is not None  # Type narrowing for type checker
         assert user.name.lower() == "boardgamegeek"
         assert user.id is not None
 
